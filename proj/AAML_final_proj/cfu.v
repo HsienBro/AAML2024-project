@@ -60,7 +60,7 @@ module Cfu (
   wire [11:0] B_index;
 
   wire [11:0] B_index_forRead;
-  wire [11:0] B_index_forPrint
+  wire [11:0] B_index_forPrint;
   reg [11:0] B_index_forWrite;
   wire [11:0] C_index;
   reg [11:0] C_index_forRead;
