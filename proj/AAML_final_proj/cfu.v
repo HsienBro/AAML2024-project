@@ -52,12 +52,15 @@ module Cfu (
   wire C_wr_en;
   reg C_wr_en_fromCFU;
   wire C_wr_en_fromTPU;
+  reg print;
   wire [11:0] A_index;
   wire [11:0] A_index_forRead;
   reg [11:0] A_index_forPrint;
   reg [11:0] A_index_forWrite;
   wire [11:0] B_index;
+
   wire [11:0] B_index_forRead;
+  wire [11:0] B_index_forPrint
   reg [11:0] B_index_forWrite;
   wire [11:0] C_index;
   reg [11:0] C_index_forRead;
@@ -77,7 +80,9 @@ module Cfu (
   localparam READ_CFU = 2'd0;
   localparam WAIT_RSP = 2'd1;
   reg [1:0] cfu_state;
-
+  wire check_CFU_or_TPU;
+  assign check_CFU_or_TPU = busy;
+  
   // wire [7:0] K_num, M_num, N_num;
   // wire [7:0] MdivFour, NdivFour;
   // wire [7:0] k, m, n;
@@ -90,12 +95,12 @@ module Cfu (
   // wire [31:0] see_a_out0, see_a_out1, see_b_out0, see_b_out1;
 
   // assign cmd_ready = ~rsp_valid;
-  assign A_index = busy ? A_index_forRead : A_index_forWrite;
-  assign A_wr_en = busy ? 0 : A_wr_en_fromCFU;
-  assign B_index = busy ? B_index_forRead : B_index_forWrite;
-  assign B_wr_en = busy ? 0 : B_wr_en_fromCFU;
-  assign C_index = busy ? C_index_forWrite : C_index_forRead;
-  assign C_wr_en = busy ? C_wr_en_fromTPU : C_wr_en_fromCFU;
+  assign A_index = check_CFU_or_TPU ? A_index_forRead : (print ? A_index_forPrint: A_index_forWrite);
+  assign A_wr_en = check_CFU_or_TPU ? 0 : A_wr_en_fromCFU;
+  assign B_index = check_CFU_or_TPU ? B_index_forRead : (print ? B_index_forPrint: B_index_forWrite);
+  assign B_wr_en = check_CFU_or_TPU ? 0 : B_wr_en_fromCFU;
+  assign C_index = check_CFU_or_TPU ? C_index_forWrite : C_index_forRead;
+  assign C_wr_en = check_CFU_or_TPU ? C_wr_en_fromTPU : C_wr_en_fromCFU;
   global_buffer_bram #(
     .ADDR_BITS(12), // ADDR_BITS 12 -> generates 2^12 entries
     .DATA_BITS(32)  // DATA_BITS 32 -> 32 bits for each entries
@@ -199,7 +204,7 @@ module Cfu (
       cfu_state <= READ_CFU;
 
       // cfu_counter <= 0;
-      // print <= 0;
+      print <= 0;
     
     end else begin
       case (cfu_state)
@@ -213,7 +218,7 @@ module Cfu (
               B_wr_en_fromCFU <= 1'b0;
               A_index_forWrite <= 12'd0 - 12'd1; // -1
               B_index_forWrite <= 12'd0 - 12'd1; // -1
-              // print = 0;
+              print = 0;
             end else if (cmd_payload_function_id[9:3] == 7'd1) begin // put data into gbuff A, B
               A_wr_en_fromCFU = 1'b1;
               // B_wr_en_fromCFU = 1'b1;
