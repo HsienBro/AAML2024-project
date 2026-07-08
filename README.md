@@ -9,8 +9,8 @@
 - **軟體層優化 (Software Optimization)**: 在軟體層面利用Loop Unrolling，降低迴圈迭代時的開銷，讓CPU更有效率的進行運算。
 
 ## 原始碼位置 (Source Code Location)
-- `proj\AAML_final_proj\cfu.v`: 硬體加速器（Verilog）。內部實作了 4x4 Systolic Array 架構以提供高效的運算能力。。
-- `proj\AAML_final_proj\src\tensorflow\lite\kernels\internal\reference\integer_ops\conv.h`: 針對軟體中的卷積層（Conv Layer）中，利用Img2Col並結合Loop Unrolling來降低卷積層的迴圈開銷。
+- `proj/AAML_final_proj/cfu.v`: 硬體加速器（Verilog）。內部實作了 4x4 Systolic Array 架構以提供高效的運算能力。。
+- `proj/AAML_final_proj/src/tensorflow/lite/kernels/internal/reference/integer_ops/conv.h`: 針對軟體中的卷積層（Conv Layer）中，利用Img2Col並結合Loop Unrolling來降低卷積層的迴圈開銷。
 
 ## 效能表現 (Performance / Results)
 - **Baseline**: `4044074` μs 
