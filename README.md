@@ -19,7 +19,6 @@
 
 
 ## Original CFU Playground README
-# ======================================
 # CFU Playground
 
 Want a faster ML processor?   Do it yourself!
