@@ -1,3 +1,25 @@
+# AAML 2024 Final Project
+
+## 專案介紹 (Project Overview)
+本專案為 NYCU-AAML 2024 的期末專案。
+基於 [CFU-Playground](https://github.com/google/CFU-Playground) 框架，透過Verilog實作Systolic Array在FPGA上加速CNN模型的卷積層(Convolution Layer)中的矩陣乘法運算。
+
+## Features
+- **硬體加速器 (Hardware Accelerator)**: 實作了4*4 Systolic Array來加速模型中的矩陣乘法運算。
+- **軟體層優化 (Software Optimization)**: 在軟體層面利用Loop Unrolling，降低迴圈迭代時的開銷，讓CPU更有效率的進行運算。
+
+## 原始碼位置 (Source Code Location)
+- `proj\AAML_final_proj\cfu.v`: 這是一個實作了4*4 Systolic Array的Verilog程式碼。
+- `proj\AAML_final_proj\src\tensorflow\lite\kernels\internal\reference\integer_ops\conv.h`: 這是在軟體層的Conv Layer中，利用Img2Col和Loop Unrolling進行優化的C++程式碼。
+
+## 效能表現 (Performance / Results)
+- **Baseline**: `4044074` μs 
+- **Accelerated**: `424153` μs
+- **Speedup**: `9.53` 倍加速
+
+
+## Original CFU Playground README
+# ======================================
 # CFU Playground
 
 Want a faster ML processor?   Do it yourself!
